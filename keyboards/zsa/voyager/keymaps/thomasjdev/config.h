@@ -28,5 +28,4 @@
 
 // Enable Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
 #define CHORDAL_HOLD
-
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD

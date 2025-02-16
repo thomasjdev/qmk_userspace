@@ -178,3 +178,70 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
+  switch (keycode) {
+    case HOME_F:
+    case HOME_J:
+    case HOME_K:
+      return TAPPING_TERM + 60;
+    default:
+      return TAPPING_TERM;
+  }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
+  // If you quickly hold a tap-hold key after tapping it, the tap action is
+  // repeated. Key repeating is useful e.g. for Vim navigation keys, but can
+  // lead to missed triggers in fast typing. Here, returning 0 means we
+  // instead want to "force hold" and disable key repeating.
+  switch (keycode) {
+    case HOME_L:
+      return QUICK_TAP_TERM;  // Enable key repeating.
+    default:
+      return 0;  // Otherwise, force hold and disable key repeating.
+  }
+}
+
+#ifdef CHORDAL_HOLD
+// Callback for Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
+bool get_chordal_hold(
+        uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
+        uint16_t other_keycode, keyrecord_t* other_record) {
+  switch (tap_hold_keycode) {
+//    case NAV_SLS:
+//      return true;
+
+    case HOME_D:
+      if (other_keycode == KC_TAB ||
+          other_keycode == KC_BSPC ) { return true; }
+      break;
+
+    case HOME_K:
+      if (other_keycode == KC_SPACE) { return true; }
+  }
+  return get_chordal_hold_default(tap_hold_record, other_record);
+}
+#endif  // CHORDAL_HOLD
+
+#ifdef CAPS_WORD_ENABLE
+bool caps_word_press_user(uint16_t keycode) {
+  switch (keycode) {
+    // Keycodes that continue Caps Word, with shift applied.
+    case KC_A ... KC_Z:
+      add_weak_mods(MOD_BIT_LSHIFT);  // Apply shift to the next key.
+      return true;
+
+    // Keycodes that continue Caps Word, without shifting.
+    case KC_1 ... KC_0:
+    case KC_BSPC:
+    case KC_DEL:
+    case KC_UNDS:
+    case KC_COLN:
+      return true;
+
+    default:
+      return false;  // Deactivate Caps Word.
+  }
+}
+#endif  // CAPS_WORD_ENABLE
