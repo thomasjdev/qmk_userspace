@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [1] = LAYOUT_voyager(
     _______, _______, _______, LGUI(LSFT(KC_3)),LGUI(LSFT(KC_4)),_______,                                 _______, _______, _______, _______, _______, _______,
-    _______, _______, MT(MOD_RSFT, KC_RIGHT_GUI),LCTL(KC_TAB),   _______, _______,                                 KC_PAGE_UP,     KC_HOME,        KC_END,         _______, _______, _______,
+    _______, _______, LSFT(LCTL(KC_TAB)),LCTL(KC_TAB),   _______, _______,                                 KC_PAGE_UP,     KC_HOME,        KC_END,         _______, _______, _______,
     _______, KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    KC_LEFT_SHIFT,  _______,                                 KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       _______, _______,
     _______, LGUI(LSFT(KC_EQUAL)),LGUI(LCTL(KC_EQUAL)),LCTL(KC_SPACE), LGUI(KC_SPACE), _______,                                 KC_PGDN,        KC_BSPC,        KC_DELETE,      _______, _______, _______,
                                                     _______, _______,                                 _______, _______
