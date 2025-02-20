@@ -3,12 +3,24 @@
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
+#ifdef CHORDAL_HOLD
+// Handedness for Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+  LAYOUT_voyager(
+  '*', '*', '*', '*', '*', '*'    , '*', '*', '*', '*', '*', '*',
+  '*', 'L', 'L', 'L', 'L', 'L'    , 'R', 'R', 'R', 'R', 'R', '*',
+  '*', 'L', 'L', 'L', 'L', 'L'    , 'R', 'R', 'R', 'R', 'R', '*',
+  '*', 'L', 'L', 'L', 'L', 'L'    , 'R', 'R', 'R', 'R', 'R', '*',
+                      '*', '*'    ,'*', '*'
+);
+#endif  // CHORDAL_HOLD
+
 enum custom_keycodes {
   RGB_SLD = ML_SAFE_RANGE,
   HSV_0_255_255,
   HSV_74_255_255,
   HSV_169_255_255,
-  ST_MACRO_0,
+  UPDIR,
 };
 
 // Left-hand home row mods
@@ -26,27 +38,32 @@ enum custom_keycodes {
 // Shortcuts for other mod keys
 #define HYPR_ESC ALL_T(KC_ESCAPE)
 #define HYPR_QUOT ALL_T(KC_QUOT)
+#define MEH_TAB MEH_T(KC_TAB)
 
+#define NAV LT(1,KC_SPACE)
+#define SYM LT(2,KC_BSPC)
+#define FN  LT(3,KC_ENTER)
+#define NUM LT(4,KC_DELETE)
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_voyager(
     KC_GRAVE,       KC_1,           KC_2,           KC_3,           KC_4,           KC_5,                                           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINUS,
-    MEH_T(KC_TAB),  KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,                                           KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSLS,
-    ALL_T(KC_ESCAPE),HOME_A,           HOME_S,          HOME_D,           HOME_F,           KC_G,                                           KC_H,           HOME_J,           HOME_K,           HOME_L,           HOME_SCLN,        KC_QUOTE,
+    MEH_TAB,  KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,                                           KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSLS,
+    HYPR_ESC, HOME_A,           HOME_S,          HOME_D,           HOME_F,           KC_G,                                           KC_H,           HOME_J,           HOME_K,           HOME_L,           HOME_SCLN,        KC_QUOTE,
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
-                                                    LT(2,KC_BSPC),  LT(4,KC_DELETE),                                LT(3,KC_ENTER), LT(1,KC_SPACE)
+                                                    SYM,  NUM,                                FN, NAV
   ),
   [1] = LAYOUT_voyager(
     _______, _______, _______, LGUI(LSFT(KC_3)),LGUI(LSFT(KC_4)),_______,                                 _______, _______, _______, _______, _______, _______,
-    _______, _______, LSFT(LCTL(KC_TAB)),LCTL(KC_TAB),   _______, _______,                                 KC_PAGE_UP,     KC_HOME,        KC_END,         _______, _______, _______,
+    _______, _______, LSFT(LCTL(KC_TAB)),LCTL(KC_TAB),   _______, _______,                                 _______,     KC_PAGE_UP,        KC_HOME,         KC_END, _______, _______,
     _______, KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    KC_LEFT_SHIFT,  _______,                                 KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       _______, _______,
-    _______, LGUI(LSFT(KC_EQUAL)),LGUI(LCTL(KC_EQUAL)),LCTL(KC_SPACE), LGUI(KC_SPACE), _______,                                 KC_PGDN,        KC_BSPC,        KC_DELETE,      _______, _______, _______,
-                                                    _______, _______,                                 _______, _______
+    _______, LGUI(LSFT(KC_SPACE)),LGUI(LCTL(KC_EQUAL)),LCTL(KC_SPACE), LGUI(KC_SPACE), _______,                                 _______,        KC_PGDN,        _______,      _______, _______, _______,
+                                                    KC_BSPC, KC_DELETE,                                 _______, _______
   ),
   [2] = LAYOUT_voyager(
     _______, _______, _______, _______, _______, _______,                                 _______, _______, _______, _______, _______, _______,
     _______, KC_QUOTE,       KC_LABK,        KC_RABK,        KC_DQUO,        KC_DOT,                                         KC_AMPR,        KC_UNDS,        KC_LBRC,        KC_RBRC,        KC_PERC,        _______,
     _______, KC_EXLM,        KC_MINUS,       KC_PLUS,        KC_EQUAL,       KC_HASH,                                        KC_PIPE,        KC_COLN,        KC_LPRN,        KC_RPRN,        KC_QUES,        _______,
-    _______, KC_CIRC,        KC_SLASH,       KC_ASTR,        KC_BSLS,        ST_MACRO_0,                                     KC_TILD,        KC_DLR,         KC_LCBR,        KC_RCBR,        KC_AT,          _______,
+    _______, KC_CIRC,        KC_SLASH,       KC_ASTR,        KC_BSLS,        UPDIR,                                     KC_TILD,        KC_DLR,         KC_LCBR,        KC_RCBR,        KC_AT,          _______,
                                                     _______, _______,                                 _______, _______
   ),
   [3] = LAYOUT_voyager(
@@ -83,7 +100,7 @@ void keyboard_post_init_user(void) {
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [0] = { {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {0,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {74,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {131,255,255}, {41,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {41,255,255}, {188,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {131,255,255}, {41,255,255}, {188,255,255}, {41,255,255} },
 
-    [1] = { {74,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {131,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {40,255,255}, {40,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {74,255,255}, {74,255,255}, {40,255,255}, {30,255,255}, {169,255,255}, {169,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {41,255,255}, {41,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {0,255,255}, {0,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255} },
+    [1] = { {74,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {131,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {40,255,255}, {40,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {74,255,255}, {74,255,255}, {40,255,255}, {30,255,255}, {169,255,255}, {169,255,255}, {74,255,255}, {0,255,255}, {0,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {41,255,255}, {41,255,255}, {74,255,255}, {74,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {188,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {131,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255}, {74,255,255} },
 
     [2] = { {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {40,255,255}, {0,255,255}, {0,255,255}, {40,255,255}, {40,255,255}, {152,255,255}, {0,255,255}, {74,255,255}, {74,255,255}, {0,255,255}, {40,255,255}, {152,255,255}, {40,255,255}, {74,255,255}, {74,255,255}, {40,255,255}, {40,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {152,255,255}, {74,255,255}, {40,255,255}, {30,255,255}, {30,255,255}, {40,255,255}, {152,255,255}, {74,255,255}, {40,255,255}, {30,255,255}, {30,255,255}, {40,255,255}, {152,255,255}, {74,255,255}, {40,255,255}, {30,255,255}, {30,255,255}, {40,255,255}, {152,255,255}, {131,255,255}, {131,255,255} },
 
@@ -146,9 +163,9 @@ bool rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case ST_MACRO_0:
+    case UPDIR:
     if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_DOT) SS_DELAY(100) SS_TAP(X_DOT) SS_DELAY(100) SS_TAP(X_SLASH));
+      SEND_STRING_DELAY("../", TAP_CODE_DELAY);
     }
     break;
 
@@ -185,6 +202,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
     case HOME_J:
     case HOME_K:
       return TAPPING_TERM + 60;
+    case NAV:
+    case SYM:
+    case FN:
+    case NUM:
+        return TAPPING_TERM - 65;
     default:
       return TAPPING_TERM;
   }
@@ -197,6 +219,8 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
   // instead want to "force hold" and disable key repeating.
   switch (keycode) {
     case HOME_L:
+    case NAV:
+    case SYM:
       return QUICK_TAP_TERM;  // Enable key repeating.
     default:
       return 0;  // Otherwise, force hold and disable key repeating.

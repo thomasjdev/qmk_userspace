@@ -16,7 +16,7 @@
 #undef MOUSEKEY_WHEEL_INTERVAL
 #define MOUSEKEY_WHEEL_INTERVAL 125
 
-#define SERIAL_NUMBER "MqNV4/P4ljG"
+#define SERIAL_NUMBER "MqNV4/bvvqAQ"
 #define LAYER_STATE_8BIT
 
 #define RGB_MATRIX_STARTUP_SPD 60
@@ -25,6 +25,10 @@
 #define TAPPING_TERM_PER_KEY
 #define PERMISSIVE_HOLD
 #define QUICK_TAP_TERM_PER_KEY
+
+// Unfortunately, some applications drop or misorder fast key events. This is a
+// partial fix to slow down the rate at which macros are sent.
+#define TAP_CODE_DELAY 5
 
 // Enable Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
 #define CHORDAL_HOLD
