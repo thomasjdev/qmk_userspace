@@ -44,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     HYPR_ESC, HOME_A,HOME_S,HOME_D,HOME_F,KC_G,           KC_LPRN,                                                                        KC_RPRN,        KC_H,           HOME_J,HOME_K,HOME_L,HOME_SCLN, HYPR_QUOT,
     KC_LEFT_SHIFT,  KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RIGHT_SHIFT,
     MO(3),          LGUI(LSFT(KC_4)),KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    LGUI(KC_SPACE),                                                                                                 LCTL(KC_SPACE), MO(1),          KC_LEFT_GUI,    KC_LEFT_ALT,    CW_TOGG,   MO(3),
-    KC_BSPC,        KC_DELETE,      MO(2),                          MO(2),          KC_ENTER,       KC_SPACE
+                                                 KC_BSPC,        KC_DELETE,      MO(2),                          MO(2),          KC_ENTER,       KC_SPACE
   ),
   [1] = LAYOUT_moonlander(
     _______, _______, _______, _______, _______, _______, _______,                                 _______, _______, _______, _______, _______, _______, _______,
@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, KC_LEFT_CTRL,   KC_LEFT_ALT,    KC_LEFT_GUI,    KC_LEFT_SHIFT,  _______, KC_PGDN,                                                                        KC_END,         KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       _______, _______,
     _______, _______, _______, _______, _______, _______,                                 _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______,                                                                                                 _______, _______, _______, _______, _______, _______,
-    LGUI(LCTL(KC_EQUAL)),LGUI(LSFT(KC_SPACE)),_______,                 _______, _______, _______
+                                          LGUI(LCTL(KC_EQUAL)),LGUI(LSFT(KC_SPACE)),_______,                 _______, _______, _______
   ),
   [2] = LAYOUT_moonlander(
     _______, KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          _______,                                 _______, KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,
@@ -68,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_RIGHT,    _______, _______, _______,                                                                 _______, _______, _______, _______, _______, _______, KC_MEDIA_PLAY_PAUSE,
     _______, _______, _______, KC_MS_BTN1,     KC_MS_BTN2,     _______,                                 _______, _______, KC_MEDIA_PREV_TRACK,KC_MEDIA_NEXT_TRACK,_______, _______,
     _______, _______, _______, _______, _______, _______,                                                                                                 _______, KC_AUDIO_VOL_UP,KC_AUDIO_VOL_DOWN,KC_AUDIO_MUTE,  _______, _______,
-    _______, _______, _______,                 _______, _______, _______
+                                            _______, _______, _______,                 _______, _______, _______
   ),
 };
 
@@ -152,8 +152,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
   switch (keycode) {
     case HOME_F:
     case HOME_J:
-    case HOME_K:
-      return TAPPING_TERM + 60;
+      return TAPPING_TERM + 30;
     default:
       return TAPPING_TERM;
   }
@@ -165,6 +164,8 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
   // lead to missed triggers in fast typing. Here, returning 0 means we
   // instead want to "force hold" and disable key repeating.
   switch (keycode) {
+    case HOME_J:
+    case HOME_K:
     case HOME_L:
       return QUICK_TAP_TERM;  // Enable key repeating.
     default:
